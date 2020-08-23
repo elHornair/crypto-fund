@@ -1,7 +1,11 @@
 <template>
   <div class="coins">
-    <h1>Coins</h1>
-    <p>{{ title }}</p>
+    <h1>{{ title }}</h1>
+    <ul>
+      <li v-for="coin in coinsList" :key="coin.id">
+        {{ coin.name }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -9,7 +13,8 @@
 export default {
   name: 'Coins',
   props: {
-    title: String
+    title: String,
+    coinsList: Array
   }
 }
 </script>

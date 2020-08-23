@@ -1,17 +1,23 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <Coins title="List of coins"/>
+    <Coins title="List of coins" :coinsList="coinsList"/>
   </div>
 </template>
 
 <script>
+
 import Coins from './components/Coins.vue'
+import CoinsListData from '../data.json'
 
 export default {
   name: 'App',
   components: {
     Coins
+  },
+  data() {
+    return {
+      coinsList: CoinsListData
+    }
   }
 }
 </script>
