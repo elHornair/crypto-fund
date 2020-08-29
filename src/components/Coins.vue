@@ -2,6 +2,35 @@
   <div class="coins">
     <h1 class="text-3xl py-4 border-b mb-10">{{ title }}</h1>
 
+    <div class="flex">
+      <div class="max-w-sm rounded overflow-hidden shadow-lg m-6">
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2">Total Market Cap</div>
+          <p class="text-gray-700 text-base">
+            {{ totalMarketCapFormatted }}
+          </p>
+        </div>
+      </div>
+
+      <div class="max-w-sm rounded overflow-hidden shadow-lg m-6">
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2">Filtered Market Cap</div>
+          <p class="text-gray-700 text-base">
+            {{ filteredMarketCapFormatted }}
+          </p>
+        </div>
+      </div>
+
+      <div class="max-w-sm rounded overflow-hidden shadow-lg m-6">
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2">Coverage</div>
+          <p class="text-gray-700 text-base">
+            {{ coverageFormatted }}
+          </p>
+        </div>
+      </div>
+    </div>
+
     <div class="overflow-x-auto bg-white rounded-lg shadow overflow-y-auto relative">
       <table class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
         <thead>
@@ -43,6 +72,7 @@ export default {
   props: {
     title: String,
     coinsList: Array,
+    config: Object,
   },
   data() {
     return {
@@ -54,5 +84,50 @@ export default {
       ]
     }
   },
+  computed: {
+    filteredCoinsList() {
+      return this.coinsList.filter((coin) => {
+        if (this.config.blacklist.includes(coin.id)) {
+          return false;
+        }
+
+        if (this.config.stableCoins.includes(coin.id)) {
+          return false;
+        }
+
+        return true;
+      });
+    },
+    totalMarketCap() {
+      return this.coinsList.reduce((total, coin) => total + coin.market_cap, 0);
+    },
+    totalMarketCapFormatted() {
+      return this.formatUSD(this.totalMarketCap);
+    },
+    filteredMarketCap() {
+      return this.filteredCoinsList.reduce((total, coin) => total + coin.market_cap, 0);
+    },
+    filteredMarketCapFormatted() {
+      return this.formatUSD(this.filteredMarketCap);
+    },
+    coverageFormatted() {
+      return `${Math.round((this.filteredMarketCap / this.totalMarketCap) * 1000) / 1000} %`;
+    }
+  },
+  methods: {
+    formatUSD(value) {
+      if (typeof value !== 'number') {
+        return value;
+      }
+
+      let formatter = new Intl.NumberFormat('de-CH', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0
+      });
+
+      return `${formatter.format(value)} USD`;
+    },
+  }
 }
 </script>
