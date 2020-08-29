@@ -1,18 +1,19 @@
 <template>
-  <tr>
-    <td class="border-dashed border-t border-gray-200">
-      <span class="text-gray-700 px-6 py-3 flex items-center">#{{ market_cap_rank }}</span>
+  <tr :class="isFiltered ? 'bg-red-200' : ''">
+    <td class="border-dashed border-t border-gray-200 text-right">
+      <span class="text-gray-700 px-6 py-3 items-center">#{{ marketCapRank }}</span>
     </td>
-    <td class="border-dashed border-t border-gray-200">
-      <span class="text-gray-700 px-6 py-3 flex items-center">
-        <img :src="imagePath" width="20" class="mr-3">{{ name }} ({{ symbolFormatted }})
+    <td class="border-dashed border-t border-gray-200 text-right">
+      <span class="inline-block text-gray-700 px-6 py-3 items-center">
+        <img :src="imagePath" width="20" class="inline-block mr-3">
+        {{ name }} ({{ symbolFormatted }})
       </span>
     </td>
-    <td class="border-dashed border-t border-gray-200">
-      <span class="text-gray-700 px-6 py-3 flex items-center">{{ current_price }}</span>
+    <td class="border-dashed border-t border-gray-200 text-right">
+      <span class="text-gray-700 px-6 py-3 items-center">{{ currentPriceFormatted }}</span>
     </td>
-    <td class="border-dashed border-t border-gray-200">
-      <span class="text-gray-700 px-6 py-3 flex items-center">{{ market_cap }}</span>
+    <td class="border-dashed border-t border-gray-200 text-right">
+      <span class="text-gray-700 px-6 py-3 items-center">{{ marketCapFormatted }}</span>
     </td>
   </tr>
 </template>
@@ -25,9 +26,10 @@ export default {
     symbol: String,
     name: String,
     imagePath: String,
-    current_price: Number,
-    market_cap: Number,
-    market_cap_rank: Number
+    currentPriceFormatted: String,
+    marketCapFormatted: String,
+    marketCapRank: Number,
+    isFiltered: Boolean,
   },
   computed: {
     symbolFormatted() {

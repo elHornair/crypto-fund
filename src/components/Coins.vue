@@ -34,7 +34,7 @@
     <div class="overflow-x-auto bg-white rounded-lg shadow overflow-y-auto relative">
       <table class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
         <thead>
-          <tr class="text-left">
+          <tr class="text-right">
               <th
                   v-for="label in labels"
                   :key="label"
@@ -46,15 +46,16 @@
         </thead>
         <tbody>
           <CoinRow
-              v-for="coin in coinsList"
+              v-for="coin in enhancedCoinsList"
               :key="coin.id"
               :id="coin.id"
               :symbol="coin.symbol"
               :name="coin.name"
               :imagePath="coin.image"
-              :current_price="coin.current_price"
-              :market_cap="coin.market_cap"
-              :market_cap_rank="coin.market_cap_rank"
+              :marketCapFormatted="coin.marketCapFormatted"
+              :marketCapRank="coin.marketCapRank"
+              :currentPriceFormatted="coin.currentPriceFormatted"
+              :isFiltered="coin.isFiltered"
           ></CoinRow>
         </tbody>
       </table>
@@ -85,17 +86,15 @@ export default {
     }
   },
   computed: {
-    filteredCoinsList() {
-      return this.coinsList.filter((coin) => {
-        if (this.config.blacklist.includes(coin.id)) {
-          return false;
-        }
+    enhancedCoinsList() {
+      return this.coinsList.map((coin) => {
+        coin.isFiltered = (this.config.blacklist.includes(coin.id) || this.config.stableCoins.includes(coin.id));
 
-        if (this.config.stableCoins.includes(coin.id)) {
-          return false;
-        }
+        coin.marketCapRank = coin.market_cap_rank;
+        coin.currentPriceFormatted = this.formatUSD(coin.current_price, 6);
+        coin.marketCapFormatted = this.formatUSD(coin.market_cap);
 
-        return true;
+        return coin;
       });
     },
     totalMarketCap() {
@@ -105,7 +104,7 @@ export default {
       return this.formatUSD(this.totalMarketCap);
     },
     filteredMarketCap() {
-      return this.filteredCoinsList.reduce((total, coin) => total + coin.market_cap, 0);
+      return this.enhancedCoinsList.reduce((total, coin) => total + (coin.isFiltered ? 0 : coin.market_cap), 0);
     },
     filteredMarketCapFormatted() {
       return this.formatUSD(this.filteredMarketCap);
@@ -115,7 +114,7 @@ export default {
     }
   },
   methods: {
-    formatUSD(value) {
+    formatUSD(value, precision = 0) {
       if (typeof value !== 'number') {
         return value;
       }
@@ -123,10 +122,10 @@ export default {
       let formatter = new Intl.NumberFormat('de-CH', {
         style: 'currency',
         currency: 'USD',
-        minimumFractionDigits: 0
+        minimumFractionDigits: precision
       });
 
-      return `${formatter.format(value)} USD`;
+      return formatter.format(value);
     },
   }
 }
