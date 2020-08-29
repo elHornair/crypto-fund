@@ -23,4 +23,5 @@ pnpm-debug.log*
 *.sw?
 
 # Project specific stuff
-data/data.json
+data/marketData.json
+data/configData.json
