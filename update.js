@@ -33,7 +33,7 @@ async function getBasicData() {
 async function getMarketData() {
 	let marketData = await getBasicData();
 
-	fs.writeFile('data.json', JSON.stringify(marketData), (err) => {
+	fs.writeFile('data/data.json', JSON.stringify(marketData), (err) => {
 		if (err) {
 			return console.log('Error writing file: ', err);
 		}

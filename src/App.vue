@@ -7,7 +7,7 @@
 <script>
 
 import Coins from './components/Coins.vue'
-import CoinsListData from '../data.json'
+import CoinsListData from '../data/data.json'
 
 export default {
   name: 'App',

@@ -23,4 +23,4 @@ pnpm-debug.log*
 *.sw?
 
 # Project specific stuff
-data.json
+data/data.json
