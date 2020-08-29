@@ -3,7 +3,7 @@
     <h1 class="text-3xl py-4 border-b mb-10">{{ title }}</h1>
 
     <div class="flex">
-      <div class="max-w-sm rounded overflow-hidden shadow-lg m-6">
+      <div class="max-w-sm rounded overflow-hidden shadow-lg m-6 text-right">
         <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2">Total Market Cap</div>
           <p class="text-gray-700 text-base">
@@ -12,7 +12,7 @@
         </div>
       </div>
 
-      <div class="max-w-sm rounded overflow-hidden shadow-lg m-6">
+      <div class="max-w-sm rounded overflow-hidden shadow-lg m-6 text-right">
         <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2">Filtered Market Cap</div>
           <p class="text-gray-700 text-base">
@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div class="max-w-sm rounded overflow-hidden shadow-lg m-6">
+      <div class="max-w-sm rounded overflow-hidden shadow-lg m-6 text-right">
         <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2">Coverage</div>
           <p class="text-gray-700 text-base">
