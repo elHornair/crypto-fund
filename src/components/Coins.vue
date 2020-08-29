@@ -97,7 +97,10 @@ export default {
         coin.marketCapRank = coin.market_cap_rank;
         coin.currentPriceFormatted = this.formatUSD(coin.current_price, 6);
         coin.marketCapFormatted = this.formatUSD(coin.market_cap);
-        coin.targetPortfolioShareFormatted = this.formatPercent(coin.market_cap / this.filteredMarketCap);
+
+        if (!coin.isFiltered) {
+          coin.targetPortfolioShareFormatted = this.formatPercent(coin.market_cap / this.filteredMarketCap);
+        }
 
         return coin;
       });
