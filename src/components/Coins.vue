@@ -51,11 +51,12 @@
               :id="coin.id"
               :symbol="coin.symbol"
               :name="coin.name"
-              :imagePath="coin.image"
-              :marketCapFormatted="coin.marketCapFormatted"
-              :marketCapRank="coin.marketCapRank"
-              :currentPriceFormatted="coin.currentPriceFormatted"
-              :isFiltered="coin.isFiltered"
+              :image-path="coin.image"
+              :market-cap-formatted="coin.marketCapFormatted"
+              :market-cap-rank="coin.marketCapRank"
+              :current-price-formatted="coin.currentPriceFormatted"
+              :is-filtered="coin.isFiltered"
+              :target-portfolio-share-formatted="coin.targetPortfolioShareFormatted"
           ></CoinRow>
         </tbody>
       </table>
@@ -82,17 +83,21 @@ export default {
           'Coin',
           'Price',
           'Market Cap.',
+          'Target Share',
       ]
     }
   },
   computed: {
+    reducedCoinsList() {
+      return this.coinsList.filter((coin) => !(this.config.blacklist.includes(coin.id) || this.config.stableCoins.includes(coin.id)));
+    },
     enhancedCoinsList() {
       return this.coinsList.map((coin) => {
         coin.isFiltered = (this.config.blacklist.includes(coin.id) || this.config.stableCoins.includes(coin.id));
-
         coin.marketCapRank = coin.market_cap_rank;
         coin.currentPriceFormatted = this.formatUSD(coin.current_price, 6);
         coin.marketCapFormatted = this.formatUSD(coin.market_cap);
+        coin.targetPortfolioShareFormatted = this.formatPercent(coin.market_cap / this.filteredMarketCap);
 
         return coin;
       });
@@ -104,16 +109,19 @@ export default {
       return this.formatUSD(this.totalMarketCap);
     },
     filteredMarketCap() {
-      return this.enhancedCoinsList.reduce((total, coin) => total + (coin.isFiltered ? 0 : coin.market_cap), 0);
+      return this.reducedCoinsList.reduce((total, coin) => total + coin.market_cap, 0);
     },
     filteredMarketCapFormatted() {
       return this.formatUSD(this.filteredMarketCap);
     },
     coverageFormatted() {
-      return `${Math.round((this.filteredMarketCap / this.totalMarketCap) * 1000) / 1000} %`;
+      return this.formatPercent(this.filteredMarketCap / this.totalMarketCap);
     }
   },
   methods: {
+    formatPercent(value) {
+      return `${(100 * value).toFixed(2)} %`;
+    },
     formatUSD(value, precision = 0) {
       if (typeof value !== 'number') {
         return value;
