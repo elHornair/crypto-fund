@@ -6,42 +6,53 @@
       <table class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
         <thead>
           <tr class="text-left">
-              <th class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-2 text-gray-600 font-bold tracking-wider uppercase text-xs">
-                ID
-              </th>
-              <th class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-2 text-gray-600 font-bold tracking-wider uppercase text-xs">
-                Name
-              </th>
-              <th class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-2 text-gray-600 font-bold tracking-wider uppercase text-xs">
-                Current Price
+              <th
+                  v-for="label in labels"
+                  :key="label"
+                  class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-2 text-gray-600 font-bold tracking-wider uppercase text-xs"
+              >
+                {{ label }}
               </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="coin in coinsList" :key="coin.id">
-            <td class="border-dashed border-t border-gray-200">
-              <span class="text-gray-700 px-6 py-3 flex items-center">{{coin.id}}</span>
-            </td>
-            <td class="border-dashed border-t border-gray-200">
-              <span class="text-gray-700 px-6 py-3 flex items-center">{{coin.name}}</span>
-            </td>
-            <td class="border-dashed border-t border-gray-200">
-              <span class="text-gray-700 px-6 py-3 flex items-center">{{coin.current_price}}</span>
-            </td>
-          </tr>
+          <CoinRow
+              v-for="coin in coinsList"
+              :key="coin.id"
+              :id="coin.id"
+              :symbol="coin.symbol"
+              :name="coin.name"
+              :imagePath="coin.image"
+              :current_price="coin.current_price"
+              :market_cap="coin.market_cap"
+              :market_cap_rank="coin.market_cap_rank"
+          ></CoinRow>
         </tbody>
       </table>
     </div>
-
   </div>
 </template>
 
 <script>
+
+import CoinRow from "./CoinRow";
+
 export default {
   name: 'Coins',
+  components: {CoinRow},
   props: {
     title: String,
-    coinsList: Array
-  }
+    coinsList: Array,
+  },
+  data() {
+    return {
+      labels: [
+          'Rank',
+          'Coin',
+          'Price',
+          'Market Cap.',
+      ]
+    }
+  },
 }
 </script>

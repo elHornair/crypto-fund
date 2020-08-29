@@ -18,6 +18,7 @@ async function getBasicData() {
 			return {
 				id: coin.id,
 				symbol: coin.symbol,
+				image: coin.image,
 				name: coin.name,
 				current_price: coin.current_price,
 				market_cap: coin.market_cap,
