@@ -16,6 +16,12 @@
       <span class="text-gray-700 px-6 py-3 items-center">{{ marketCapFormatted }}</span>
     </td>
     <td class="border-dashed border-t border-gray-200 text-right">
+      <span class="text-gray-700 px-6 py-3 items-center">{{ amountFormatted }}</span>
+    </td>
+    <td class="border-dashed border-t border-gray-200 text-right">
+      <span class="text-gray-700 px-6 py-3 items-center">{{ amountUSDFormatted }}</span>
+    </td>
+    <td class="border-dashed border-t border-gray-200 text-right">
       <span class="text-gray-700 px-6 py-3 items-center">{{ targetPortfolioShareFormatted }}</span>
     </td>
   </tr>
@@ -34,6 +40,8 @@ export default {
     marketCapRank: Number,
     isFiltered: Boolean,
     targetPortfolioShareFormatted: String,
+    amountFormatted: String,
+    amountUSDFormatted: String,
   },
   computed: {
     symbolFormatted() {

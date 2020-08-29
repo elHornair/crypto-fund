@@ -29,6 +29,15 @@
           </p>
         </div>
       </div>
+
+      <div class="max-w-sm rounded overflow-hidden shadow-lg m-6 text-right">
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2">Portfolio Value</div>
+          <p class="text-gray-700 text-base">
+            {{ totalPortfolioValueFormatted }}
+          </p>
+        </div>
+      </div>
     </div>
 
     <div class="overflow-x-auto bg-white rounded-lg shadow overflow-y-auto relative">
@@ -57,6 +66,8 @@
               :current-price-formatted="coin.currentPriceFormatted"
               :is-filtered="coin.isFiltered"
               :target-portfolio-share-formatted="coin.targetPortfolioShareFormatted"
+              :amount-formatted="coin.amountFormatted"
+              :amount-u-s-d-formatted="coin.amountUSDFormatted"
           ></CoinRow>
         </tbody>
       </table>
@@ -83,6 +94,8 @@ export default {
           'Coin',
           'Price',
           'Market Cap.',
+          'Amount',
+          'Amount USD',
           'Target Share',
       ]
     }
@@ -99,7 +112,25 @@ export default {
         coin.marketCapFormatted = this.formatUSD(coin.market_cap);
 
         if (!coin.isFiltered) {
+          if (this.config.portfolio[coin.id]) {
+            coin.amount = this.config.portfolio[coin.id].reduce((total, currentItem) => total + currentItem, 0);
+            coin.amountFormatted = coin.amount.toFixed(6);
+            coin.amountUSD = coin.amount * coin.current_price;
+            coin.amountUSDFormatted = this.formatUSD(coin.amountUSD);
+          } else {
+            coin.amount = 0;
+            coin.amountFormatted = '🚀';
+            coin.amountUSD = 0;
+            coin.amountUSDFormatted = '🚀';
+          }
+
           coin.targetPortfolioShareFormatted = this.formatPercent(coin.market_cap / this.filteredMarketCap);
+        } else {
+          coin.amount = 0;
+          coin.amountFormatted = '☠️';
+          coin.amountUSD = 0;
+          coin.amountUSDFormatted = '☠️';
+          coin.targetPortfolioShareFormatted = '☠️';
         }
 
         return coin;
@@ -116,6 +147,9 @@ export default {
     },
     filteredMarketCapFormatted() {
       return this.formatUSD(this.filteredMarketCap);
+    },
+    totalPortfolioValueFormatted() {
+      return this.formatUSD(this.enhancedCoinsList.reduce((total, coin) => total + (coin.amountUSD ? coin.amountUSD : 0), 0));
     },
     coverageFormatted() {
       return this.formatPercent(this.filteredMarketCap / this.totalMarketCap);
