@@ -1,5 +1,61 @@
 @tailwind base;
-
 @tailwind components;
-
 @tailwind utilities;
+
+.table-box {
+    @apply
+        relative
+        overflow-x-auto
+        overflow-y-auto
+        shadow
+        rounded-lg
+        bg-white
+    ;
+}
+
+.table-box__table {
+    @apply
+        relative
+        table-auto
+        w-full
+        border-collapse
+        whitespace-no-wrap
+        bg-white
+    ;
+}
+
+.table-box__header-cell {
+    @apply
+        sticky
+        tracking-wider
+        top-0
+        px-6
+        py-2
+        border-b
+        border-gray-200
+        font-bold
+        text-right
+        text-xs
+        text-gray-600
+        uppercase
+        bg-gray-100
+    ;
+}
+
+.table-box__content-cell {
+    @apply
+        border-dashed
+        border-t
+        border-gray-200
+        text-right
+    ;
+}
+
+.table-box__content-cell-content {
+    @apply
+        items-center
+        px-6
+        py-3
+        text-gray-700
+    ;
+}

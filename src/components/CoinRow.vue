@@ -1,28 +1,28 @@
 <template>
   <tr :class="isFiltered ? 'bg-red-200' : ''">
-    <td class="border-dashed border-t border-gray-200 text-right">
-      <span class="text-gray-700 px-6 py-3 items-center">#{{ marketCapRank }}</span>
+    <td class="table-box__content-cell">
+      <span class="table-box__content-cell-content">#{{ marketCapRank }}</span>
     </td>
-    <td class="border-dashed border-t border-gray-200 text-right">
-      <span class="inline-block text-gray-700 px-6 py-3 items-center">
+    <td class="table-box__content-cell">
+      <span class="inline-block table-box__content-cell-content">
         <img :src="imagePath" width="20" class="inline-block mr-3">
         {{ name }} ({{ symbolFormatted }})
       </span>
     </td>
-    <td class="border-dashed border-t border-gray-200 text-right">
-      <span class="text-gray-700 px-6 py-3 items-center">{{ currentPriceFormatted }}</span>
+    <td class="table-box__content-cell">
+      <span class="table-box__content-cell-content">{{ currentPriceFormatted }}</span>
     </td>
-    <td class="border-dashed border-t border-gray-200 text-right">
-      <span class="text-gray-700 px-6 py-3 items-center">{{ marketCapFormatted }}</span>
+    <td class="table-box__content-cell">
+      <span class="table-box__content-cell-content">{{ marketCapFormatted }}</span>
     </td>
-    <td class="border-dashed border-t border-gray-200 text-right">
-      <span class="text-gray-700 px-6 py-3 items-center">{{ amountFormatted }}</span>
+    <td class="table-box__content-cell">
+      <span class="table-box__content-cell-content">{{ amountFormatted }}</span>
     </td>
-    <td class="border-dashed border-t border-gray-200 text-right">
-      <span class="text-gray-700 px-6 py-3 items-center">{{ amountUSDFormatted }}</span>
+    <td class="table-box__content-cell">
+      <span class="table-box__content-cell-content">{{ amountUSDFormatted }}</span>
     </td>
-    <td class="border-dashed border-t border-gray-200 text-right">
-      <span class="text-gray-700 px-6 py-3 items-center">{{ targetPortfolioShareFormatted }}</span>
+    <td class="table-box__content-cell">
+      <span class="table-box__content-cell-content">{{ targetPortfolioShareFormatted }}</span>
     </td>
   </tr>
 </template>

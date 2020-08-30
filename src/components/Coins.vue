@@ -40,14 +40,14 @@
       </div>
     </div>
 
-    <div class="overflow-x-auto bg-white rounded-lg shadow overflow-y-auto relative">
-      <table class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
+    <div class="table-box">
+      <table class="table-box__table">
         <thead>
-          <tr class="text-right">
+          <tr>
               <th
                   v-for="label in labels"
                   :key="label"
-                  class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-2 text-gray-600 font-bold tracking-wider uppercase text-xs"
+                  class="table-box__header-cell"
               >
                 {{ label }}
               </th>
