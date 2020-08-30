@@ -1,7 +1,7 @@
 <template>
   <tr>
     <td class="table-box__content-cell">
-      <span class="inline-block table-box__content-cell-content">
+      <span class="table-box__content-cell-content">
         <DisplayCoin :symbol="symbol" :name="name" :image-path="imagePath"></DisplayCoin>
       </span>
     </td>

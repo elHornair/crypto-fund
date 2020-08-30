@@ -54,6 +54,7 @@
 
 .table-box__content-cell-content {
     @apply
+        inline-block
         items-center
         px-6
         py-3

@@ -99,18 +99,35 @@
         </tr>
         </thead>
         <tbody>
-        <PortfolioRow
-            v-for="coin in portfolioCoinsList"
-            :key="coin.id"
-            :symbol="coin.symbol"
-            :name="coin.name"
-            :image-path="coin.image"
-            :current-price-formatted="coin.currentPriceFormatted"
-            :amount-formatted="coin.amountFormatted"
-            :amount-u-s-d-formatted="coin.amountUSDFormatted"
-            :target-portfolio-share-formatted="coin.targetPortfolioShareFormatted"
-            :current-portfolio-share-formatted="coin.currentPortfolioShareFormatted"
-        ></PortfolioRow>
+          <PortfolioRow
+              v-for="coin in portfolioCoinsList"
+              :key="coin.id"
+              :symbol="coin.symbol"
+              :name="coin.name"
+              :image-path="coin.image"
+              :current-price-formatted="coin.currentPriceFormatted"
+              :amount-formatted="coin.amountFormatted"
+              :amount-u-s-d-formatted="coin.amountUSDFormatted"
+              :target-portfolio-share-formatted="coin.targetPortfolioShareFormatted"
+              :current-portfolio-share-formatted="coin.currentPortfolioShareFormatted"
+          ></PortfolioRow>
+          <tr class="border-collapse border-t-2 border-gray-500 font-bold">
+            <td class="table-box__content-cell">
+              <span class="table-box__content-cell-content">Total</span>
+            </td>
+            <td class="table-box__content-cell" colspan="3">
+              <span class="table-box__content-cell-content">{{ totalPortfolioValueUSDFormatted }}</span>
+            </td>
+            <td class="table-box__content-cell">
+              <span class="table-box__content-cell-content">{{ totalTargetPortfolioShareFormatted }}</span>
+            </td>
+            <td class="table-box__content-cell">
+              <span class="table-box__content-cell-content">{{ totalCurrentPortfolioShareFormatted }}</span>
+            </td>
+            <td class="table-box__content-cell">
+              <span class="table-box__content-cell-content">TODO</span>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -141,9 +158,6 @@ export default {
     filteredMarketCapUSDFormatted() {
       return this.formatUSD(this.filteredMarketCapUSD);
     },
-    totalPortfolioValueUSDFormatted() {
-      return this.formatUSD(this.totalPortfolioValueUSD);
-    },
     marketCoverageFormatted() {
       return this.formatPercent(this.filteredMarketCapUSD / this.totalMarketCapUSD);
     },
@@ -155,6 +169,22 @@ export default {
     },
     bitcoinShareFormatted() {
       return this.formatPercent(this.bitcoinShare);
+    },
+    totalTargetPortfolioShareFormatted() {// TODO: this is wrong. figure out why
+      return this.formatPercent(
+          this.portfolioCoinsList.reduce((total, coin) => total + coin.targetPortfolioShare, 0)
+      );
+    },
+    totalCurrentPortfolioShareFormatted() {
+      return this.formatPercent(
+          this.portfolioCoinsList.reduce((total, coin) => total + coin.currentPortfolioShare, 0)
+      );
+    },
+    totalPortfolioValueUSD() {
+      return this.portfolioCoinsList.reduce((total, coin) => total + (coin.amountUSD ? coin.amountUSD : 0), 0);
+    },
+    totalPortfolioValueUSDFormatted() {
+      return this.formatUSD(this.totalPortfolioValueUSD);
     }
   },
   methods: {
@@ -182,7 +212,6 @@ export default {
       bitCoinDominance: 0,
       maxBitcoinShare: 0.5,
       filteredMarketCapUSD: 0,
-      totalPortfolioValueUSD: 0,
     }
   },
   created() {
@@ -231,18 +260,22 @@ export default {
 
     this.portfolioCoinsList = this.portfolioCoinsList.map((coin) => {
       if (coin.id === 'bitcoin') {
-        coin.targetPortfolioShareFormatted = this.formatPercent(this.bitcoinShare);
+        coin.targetPortfolioShare = this.bitcoinShare;
       } else {
-        coin.targetPortfolioShareFormatted = this.formatPercent(coin.marketCap / ((1 - this.bitcoinShare) * this.filteredMarketCapUSD));
+        // This is a bit complicated. Basically we need to distribute everything that would mathematically belong to bitcoin among the remaining coins
+        let totalMarketCapWithoutBitcoin = ((1 - this.bitCoinDominance) * this.filteredMarketCapUSD);
+        coin.targetPortfolioShare = (coin.marketCap / (totalMarketCapWithoutBitcoin)) * (1 - this.bitcoinShare);
       }
+
+      coin.targetPortfolioShareFormatted = this.formatPercent(coin.targetPortfolioShare);
 
       return coin;
     });
 
-    this.totalPortfolioValueUSD = this.portfolioCoinsList.reduce((total, coin) => total + (coin.amountUSD ? coin.amountUSD : 0), 0);
-
     this.portfolioCoinsList = this.portfolioCoinsList.map((coin) => {
-      coin.currentPortfolioShareFormatted = this.formatPercent(coin.amountUSD / this.totalPortfolioValueUSD);
+      coin.currentPortfolioShare = coin.amountUSD / this.totalPortfolioValueUSD;
+      coin.currentPortfolioShareFormatted = this.formatPercent(coin.currentPortfolioShare);
+
       return coin;
     });
   }
