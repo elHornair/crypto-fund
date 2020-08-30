@@ -5,8 +5,7 @@
     </td>
     <td class="table-box__content-cell">
       <span class="inline-block table-box__content-cell-content">
-        <img :src="imagePath" width="20" class="inline-block mr-3">
-        {{ name }} ({{ symbolFormatted }})
+        <DisplayCoin :symbol="symbol" :name="name" :image-path="imagePath"></DisplayCoin>
       </span>
     </td>
     <td class="table-box__content-cell">
@@ -22,8 +21,11 @@
 </template>
 
 <script>
+import DisplayCoin from "./DisplayCoin";
+
 export default {
   name: 'MarketRow',
+  components: {DisplayCoin},
   props: {
     symbol: String,
     name: String,
@@ -33,11 +35,6 @@ export default {
     marketCapRank: Number,
     statusColor: String,
     statusSymbol: String,
-  },
-  computed: {
-    symbolFormatted() {
-      return this.symbol ? `$${this.symbol.toString().toUpperCase()}` : '';
-    }
   }
 }
 </script>

@@ -5,7 +5,6 @@
 </template>
 
 <script>
-
 import Coins from './components/Coins.vue'
 import CoinsListData from '../data/marketData.json'
 import ConfigData from '../data/configData.json'

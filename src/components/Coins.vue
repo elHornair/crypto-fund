@@ -112,7 +112,6 @@
 </template>
 
 <script>
-
 import MarketRow from "./MarketRow";
 import PortfolioRow from "./PortfolioRow";
 
