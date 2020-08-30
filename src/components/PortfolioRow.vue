@@ -20,8 +20,8 @@
     <td class="table-box__content-cell">
       <span class="table-box__content-cell-content">{{ currentPortfolioShareFormatted }}</span>
     </td>
-    <td class="table-box__content-cell">
-      <span class="table-box__content-cell-content">TODO: delta</span>
+    <td :class="'table-box__content-cell' + (this.delta <= 0 ? ' bg-red-200' : ' bg-green-200')">
+      <span class="table-box__content-cell-content">{{ deltaFormatted }}</span>
     </td>
   </tr>
 </template>
@@ -41,6 +41,8 @@ export default {
     amountUSDFormatted: String,
     targetPortfolioShareFormatted: String,
     currentPortfolioShareFormatted: String,
+    delta: Number,
+    deltaFormatted: String,
   }
 }
 </script>

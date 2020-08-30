@@ -110,6 +110,8 @@
               :amount-u-s-d-formatted="coin.amountUSDFormatted"
               :target-portfolio-share-formatted="coin.targetPortfolioShareFormatted"
               :current-portfolio-share-formatted="coin.currentPortfolioShareFormatted"
+              :delta="coin.delta"
+              :delta-formatted="coin.deltaFormatted"
           ></PortfolioRow>
           <tr class="border-collapse border-t-2 border-gray-500 font-bold">
             <td class="table-box__content-cell">
@@ -125,7 +127,7 @@
               <span class="table-box__content-cell-content">{{ totalCurrentPortfolioShareFormatted }}</span>
             </td>
             <td class="table-box__content-cell">
-              <span class="table-box__content-cell-content">TODO</span>
+              <span class="table-box__content-cell-content">{{ totalDeltaFormatted }}</span>
             </td>
           </tr>
         </tbody>
@@ -185,7 +187,10 @@ export default {
     },
     totalPortfolioValueUSDFormatted() {
       return this.formatUSD(this.totalPortfolioValueUSD);
-    }
+    },
+    totalDeltaFormatted() {
+      return this.formatPercent(this.portfolioCoinsList.reduce((total, coin) => total + coin.delta, 0));
+    },
   },
   methods: {
     formatPercent(value) {
@@ -275,6 +280,8 @@ export default {
     this.portfolioCoinsList = this.portfolioCoinsList.map((coin) => {
       coin.currentPortfolioShare = coin.amountUSD / this.totalPortfolioValueUSD;
       coin.currentPortfolioShareFormatted = this.formatPercent(coin.currentPortfolioShare);
+      coin.delta = coin.currentPortfolioShare - coin.targetPortfolioShare;
+      coin.deltaFormatted = this.formatPercent(coin.delta);
 
       return coin;
     });
