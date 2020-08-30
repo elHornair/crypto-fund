@@ -16,32 +16,22 @@
       <span class="table-box__content-cell-content">{{ marketCapFormatted }}</span>
     </td>
     <td class="table-box__content-cell">
-      <span class="table-box__content-cell-content">{{ amountFormatted }}</span>
-    </td>
-    <td class="table-box__content-cell">
-      <span class="table-box__content-cell-content">{{ amountUSDFormatted }}</span>
-    </td>
-    <td class="table-box__content-cell">
-      <span class="table-box__content-cell-content">{{ targetPortfolioShareFormatted }}</span>
+      <span class="table-box__content-cell-content">{{ isFiltered }}</span>
     </td>
   </tr>
 </template>
 
 <script>
 export default {
-  name: 'CoinRow',
+  name: 'MarketRow',
   props: {
-    id: String,
     symbol: String,
     name: String,
     imagePath: String,
     currentPriceFormatted: String,
     marketCapFormatted: String,
     marketCapRank: Number,
-    isFiltered: Boolean,
-    targetPortfolioShareFormatted: String,
-    amountFormatted: String,
-    amountUSDFormatted: String,
+    isFiltered: Boolean,// TODO: instead of "filtered", use "status" (red, green yellow, neutral or something?)
   },
   computed: {
     symbolFormatted() {

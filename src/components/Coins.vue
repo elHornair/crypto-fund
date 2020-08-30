@@ -1,6 +1,8 @@
 <template>
   <div class="coins">
-    <h1 class="text-3xl py-4 border-b mb-10">{{ title }}</h1>
+    <h1 class="text-3xl py-4 border-b mb-10">Crypto fund</h1>
+
+    <h2 class="text-2xl mb-4">General Stats</h2>
 
     <div class="flex">
       <div class="max-w-sm rounded overflow-hidden shadow-lg m-6 text-right">
@@ -40,12 +42,14 @@
       </div>
     </div>
 
+    <h2 class="text-2xl mb-4">Market</h2>
+
     <div class="table-box">
       <table class="table-box__table">
         <thead>
           <tr>
               <th
-                  v-for="label in labels"
+                  v-for="label in ['Rank', 'Coin', 'Price', 'Market Cap.', 'Status']"
                   :key="label"
                   class="table-box__header-cell"
               >
@@ -54,10 +58,9 @@
           </tr>
         </thead>
         <tbody>
-          <CoinRow
+          <MarketRow
               v-for="coin in enhancedCoinsList"
               :key="coin.id"
-              :id="coin.id"
               :symbol="coin.symbol"
               :name="coin.name"
               :image-path="coin.image"
@@ -65,40 +68,58 @@
               :market-cap-rank="coin.marketCapRank"
               :current-price-formatted="coin.currentPriceFormatted"
               :is-filtered="coin.isFiltered"
-              :target-portfolio-share-formatted="coin.targetPortfolioShareFormatted"
-              :amount-formatted="coin.amountFormatted"
-              :amount-u-s-d-formatted="coin.amountUSDFormatted"
-          ></CoinRow>
+          ></MarketRow>
         </tbody>
       </table>
     </div>
+
+    <h2 class="text-2xl mb-4">Portfolio</h2>
+
+    <div class="table-box">
+      <table class="table-box__table">
+        <thead>
+        <tr>
+          <th
+              v-for="label in ['Coin', 'Price', 'Amount', 'Amount USD', 'Target Share', 'Current Share', 'Delta']"
+              :key="label"
+              class="table-box__header-cell"
+          >
+            {{ label }}
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <PortfolioRow
+            v-for="coin in enhancedCoinsList"
+            :key="coin.id"
+            :symbol="coin.symbol"
+            :name="coin.name"
+            :image-path="coin.image"
+            :current-price-formatted="coin.currentPriceFormatted"
+            :amount-formatted="coin.amountFormatted"
+            :amount-u-s-d-formatted="coin.amountUSDFormatted"
+            :target-portfolio-share-formatted="coin.targetPortfolioShareFormatted"
+        ></PortfolioRow>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="text-2xl mb-4">Trades</h2>
+    <p>Coming soon...</p>
   </div>
 </template>
 
 <script>
 
-import CoinRow from "./CoinRow";
+import MarketRow from "./MarketRow";
+import PortfolioRow from "./PortfolioRow";
 
 export default {
   name: 'Coins',
-  components: {CoinRow},
+  components: {PortfolioRow, MarketRow},
   props: {
-    title: String,
     coinsList: Array,
     config: Object,
-  },
-  data() {
-    return {
-      labels: [
-          'Rank',
-          'Coin',
-          'Price',
-          'Market Cap.',
-          'Amount',
-          'Amount USD',
-          'Target Share',
-      ]
-    }
   },
   computed: {
     reducedCoinsList() {
