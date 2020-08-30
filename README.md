@@ -20,5 +20,3 @@ Just playing around a little with the [Coingecko API](https://www.coingecko.com/
 ### Update data
 ```node update.js```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
