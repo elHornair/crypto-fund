@@ -19,7 +19,7 @@
       <span class="table-box__content-cell-content">{{ targetPortfolioShareFormatted }}</span>
     </td>
     <td class="table-box__content-cell">
-      <span class="table-box__content-cell-content">TODO: current share</span>
+      <span class="table-box__content-cell-content">{{ currentPortfolioShareFormatted }}</span>
     </td>
     <td class="table-box__content-cell">
       <span class="table-box__content-cell-content">TODO: delta</span>
@@ -38,6 +38,7 @@ export default {
     amountFormatted: String,
     amountUSDFormatted: String,
     targetPortfolioShareFormatted: String,
+    currentPortfolioShareFormatted: String,
   },
   computed: {
     symbolFormatted() {

@@ -1,5 +1,5 @@
 <template>
-  <tr :class="isFiltered ? 'bg-red-200' : ''">
+  <tr :class="statusColor ? statusColor : ''">
     <td class="table-box__content-cell">
       <span class="table-box__content-cell-content">#{{ marketCapRank }}</span>
     </td>
@@ -16,7 +16,7 @@
       <span class="table-box__content-cell-content">{{ marketCapFormatted }}</span>
     </td>
     <td class="table-box__content-cell">
-      <span class="table-box__content-cell-content">{{ isFiltered }}</span>
+      <span class="table-box__content-cell-content">{{ statusSymbol }}</span>
     </td>
   </tr>
 </template>
@@ -31,7 +31,8 @@ export default {
     currentPriceFormatted: String,
     marketCapFormatted: String,
     marketCapRank: Number,
-    isFiltered: Boolean,// TODO: instead of "filtered", use "status" (red, green yellow, neutral or something?)
+    statusColor: String,
+    statusSymbol: String,
   },
   computed: {
     symbolFormatted() {

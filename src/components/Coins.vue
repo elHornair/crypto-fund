@@ -59,7 +59,7 @@
         </thead>
         <tbody>
           <MarketRow
-              v-for="coin in enhancedCoinsList"
+              v-for="coin in marketCoinsList"
               :key="coin.id"
               :symbol="coin.symbol"
               :name="coin.name"
@@ -67,7 +67,8 @@
               :market-cap-formatted="coin.marketCapFormatted"
               :market-cap-rank="coin.marketCapRank"
               :current-price-formatted="coin.currentPriceFormatted"
-              :is-filtered="coin.isFiltered"
+              :status-symbol="coin.statusSymbol"
+              :status-color="coin.statusColor"
           ></MarketRow>
         </tbody>
       </table>
@@ -90,7 +91,7 @@
         </thead>
         <tbody>
         <PortfolioRow
-            v-for="coin in enhancedCoinsList"
+            v-for="coin in portfolioCoinsList"
             :key="coin.id"
             :symbol="coin.symbol"
             :name="coin.name"
@@ -99,6 +100,7 @@
             :amount-formatted="coin.amountFormatted"
             :amount-u-s-d-formatted="coin.amountUSDFormatted"
             :target-portfolio-share-formatted="coin.targetPortfolioShareFormatted"
+            :current-portfolio-share-formatted="coin.currentPortfolioShareFormatted"
         ></PortfolioRow>
         </tbody>
       </table>
@@ -122,55 +124,65 @@ export default {
     config: Object,
   },
   computed: {
-    reducedCoinsList() {
+    reducedCoinsList() {// TODO: lets see if I can get rid of this
       return this.coinsList.filter((coin) => !(this.config.blacklist.includes(coin.id) || this.config.stableCoins.includes(coin.id)));
     },
-    enhancedCoinsList() {
+    marketCoinsList() {
       return this.coinsList.map((coin) => {
-        coin.isFiltered = (this.config.blacklist.includes(coin.id) || this.config.stableCoins.includes(coin.id));
+        coin.marketCap = coin.market_cap;
         coin.marketCapRank = coin.market_cap_rank;
         coin.currentPriceFormatted = this.formatUSD(coin.current_price, 6);
-        coin.marketCapFormatted = this.formatUSD(coin.market_cap);
+        coin.marketCapFormatted = this.formatUSD(coin.marketCap);
 
-        if (!coin.isFiltered) {
-          if (this.config.portfolio[coin.id]) {
-            coin.amount = this.config.portfolio[coin.id].reduce((total, currentItem) => total + currentItem, 0);
-            coin.amountFormatted = coin.amount.toFixed(6);
-            coin.amountUSD = coin.amount * coin.current_price;
-            coin.amountUSDFormatted = this.formatUSD(coin.amountUSD);
-          } else {
-            coin.amount = 0;
-            coin.amountFormatted = '🚀';
-            coin.amountUSD = 0;
-            coin.amountUSDFormatted = '🚀';
-          }
-
-          coin.targetPortfolioShareFormatted = this.formatPercent(coin.market_cap / this.filteredMarketCap);
+        if (this.config.blacklist.includes(coin.id)) {
+          coin.statusSymbol = '💀';
+          coin.statusColor = 'bg-red-200';
+        } else if (this.config.stableCoins.includes(coin.id)) {
+          coin.statusSymbol = '💲';
+          coin.statusColor = 'bg-yellow-200';
         } else {
-          coin.amount = 0;
-          coin.amountFormatted = '☠️';
-          coin.amountUSD = 0;
-          coin.amountUSDFormatted = '☠️';
-          coin.targetPortfolioShareFormatted = '☠️';
+          coin.statusSymbol = '🚀';
+          coin.statusColor = '';
         }
 
         return coin;
       });
     },
+    portfolioCoinsList() {
+      return this.marketCoinsList
+        .filter((coin) => !(this.config.blacklist.includes(coin.id) || this.config.stableCoins.includes(coin.id)))
+        .map((coin) => {
+
+          coin.amount =
+              this.config.portfolio[coin.id] ?
+              this.config.portfolio[coin.id].reduce((total, currentItem) => total + currentItem, 0) :
+              0
+          ;
+
+          coin.amountFormatted = coin.amount.toFixed(6);
+          coin.amountUSD = coin.amount * coin.current_price;
+          coin.amountUSDFormatted = this.formatUSD(coin.amountUSD);
+
+          coin.targetPortfolioShareFormatted = this.formatPercent(coin.marketCap / this.filteredMarketCap);
+          // TODO: now use the total portfolio value to calculate coin.currentPortfolioShareFormatted
+
+          return coin;
+        });
+    },
     totalMarketCap() {
-      return this.coinsList.reduce((total, coin) => total + coin.market_cap, 0);
+      return this.coinsList.reduce((total, coin) => total + coin.marketCap, 0);
     },
     totalMarketCapFormatted() {
       return this.formatUSD(this.totalMarketCap);
     },
     filteredMarketCap() {
-      return this.reducedCoinsList.reduce((total, coin) => total + coin.market_cap, 0);
+      return this.reducedCoinsList.reduce((total, coin) => total + coin.marketCap, 0);
     },
     filteredMarketCapFormatted() {
       return this.formatUSD(this.filteredMarketCap);
     },
     totalPortfolioValueFormatted() {
-      return this.formatUSD(this.enhancedCoinsList.reduce((total, coin) => total + (coin.amountUSD ? coin.amountUSD : 0), 0));
+      return this.formatUSD(this.portfolioCoinsList.reduce((total, coin) => total + (coin.amountUSD ? coin.amountUSD : 0), 0));
     },
     coverageFormatted() {
       return this.formatPercent(this.filteredMarketCap / this.totalMarketCap);
