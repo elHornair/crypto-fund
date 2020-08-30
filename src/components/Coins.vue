@@ -34,6 +34,15 @@
 
       <div class="max-w-sm rounded overflow-hidden shadow-lg m-6 text-right">
         <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2">Bitcoin Dominance</div>
+          <p class="text-gray-700 text-base">
+            {{ bitCoinDominanceFormatted }} ({{ bitcoinShareFormatted }})
+          </p>
+        </div>
+      </div>
+
+      <div class="max-w-sm rounded overflow-hidden shadow-lg m-6 text-right">
+        <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2">Portfolio Value</div>
           <p class="text-gray-700 text-base">
             {{ totalPortfolioValueUSDFormatted }}
@@ -137,11 +146,20 @@ export default {
     },
     marketCoverageFormatted() {
       return this.formatPercent(this.filteredMarketCapUSD / this.totalMarketCapUSD);
+    },
+    bitCoinDominanceFormatted() {
+      return this.formatPercent(this.bitCoinDominance);
+    },
+    bitcoinShare() {
+      return Math.min(this.bitCoinDominance, this.maxBitcoinShare);
+    },
+    bitcoinShareFormatted() {
+      return this.formatPercent(this.bitcoinShare);
     }
   },
   methods: {
     formatPercent(value) {
-      return `${(100 * value).toFixed(2)} %`;
+      return `${(100 * value).toFixed(2)}%`;
     },
     formatUSD(value, precision = 0) {
       if (typeof value !== 'number') {
@@ -161,6 +179,8 @@ export default {
     return {
       marketCoinsList: [],
       portfolioCoinsList: [],
+      bitCoinDominance: 0,
+      maxBitcoinShare: 0.5,
       filteredMarketCapUSD: 0,
       totalPortfolioValueUSD: 0,
     }
@@ -207,9 +227,15 @@ export default {
     ;
 
     this.filteredMarketCapUSD = this.portfolioCoinsList.reduce((total, coin) => total + coin.marketCap, 0);
+    this.bitCoinDominance = this.portfolioCoinsList.find(coin => coin.id === 'bitcoin').marketCap / this.filteredMarketCapUSD;
 
     this.portfolioCoinsList = this.portfolioCoinsList.map((coin) => {
-      coin.targetPortfolioShareFormatted = this.formatPercent(coin.marketCap / this.filteredMarketCapUSD);
+      if (coin.id === 'bitcoin') {
+        coin.targetPortfolioShareFormatted = this.formatPercent(this.bitcoinShare);
+      } else {
+        coin.targetPortfolioShareFormatted = this.formatPercent(coin.marketCap / ((1 - this.bitcoinShare) * this.filteredMarketCapUSD));
+      }
+
       return coin;
     });
 
