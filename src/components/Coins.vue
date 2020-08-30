@@ -172,7 +172,7 @@ export default {
     bitcoinShareFormatted() {
       return this.formatPercent(this.bitcoinShare);
     },
-    totalTargetPortfolioShareFormatted() {// TODO: this is wrong. figure out why
+    totalTargetPortfolioShareFormatted() {
       return this.formatPercent(
           this.portfolioCoinsList.reduce((total, coin) => total + coin.targetPortfolioShare, 0)
       );
