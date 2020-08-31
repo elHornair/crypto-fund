@@ -136,17 +136,29 @@
     </div>
 
     <h2 class="text-2xl mb-4">Trades</h2>
-    <p>Coming soon...</p>
+    <p class="text-base mb-4">The following trades are suggested in the next rebalancing.</p>
+    <!-- TODO: move this to it's own component -->
+    <ul>
+      <li
+        v-for="coin in tradeCoinsList"
+        :key="coin.id"
+        :class="'border-t-4 rounded-b text-teal-900 px-4 py-3 shadow-md mb-4' + (coin.delta > 0 ? ' bg-red-100 border-red-400' : ' bg-teal-100 border-teal-500')"
+      >
+          <p class="font-bold"><DisplayCoin :symbol="coin.symbol" :name="coin.name" :image-path="coin.image"></DisplayCoin></p>
+          <p class="text-sm">{{ coin.actionFormatted }}</p>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
 import MarketRow from "./MarketRow";
 import PortfolioRow from "./PortfolioRow";
+import DisplayCoin from "./DisplayCoin";
 
 export default {
   name: 'Coins',
-  components: {PortfolioRow, MarketRow},
+  components: {DisplayCoin, PortfolioRow, MarketRow},
   props: {
     coinsList: Array,
     config: Object,
@@ -195,6 +207,9 @@ export default {
     totalDeltaUSDFormatted() {
       return this.formatUSD(this.portfolioCoinsList.reduce((total, coin) => total + coin.deltaUSD, 0));
     },
+    tradeCoinsList() {
+      return [...this.portfolioCoinsList].sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
+    },
   },
   methods: {
     formatPercent(value) {
@@ -234,10 +249,10 @@ export default {
 
       if (this.config.blacklist.includes(coin.id)) {
         coin.statusSymbol = '💀';
-        coin.statusColor = 'bg-red-200';
+        coin.statusColor = 'bg-red-100';
       } else if (this.config.stableCoins.includes(coin.id)) {
         coin.statusSymbol = '💲';
-        coin.statusColor = 'bg-yellow-200';
+        coin.statusColor = 'bg-orange-100';
       } else {
         coin.statusSymbol = '🚀';
         coin.statusColor = '';

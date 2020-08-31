@@ -14,10 +14,10 @@
     <td class="table-box__content-cell">
       <span class="table-box__content-cell-content">{{ targetPortfolioShareFormatted }}</span>
     </td>
-    <td :class="'table-box__content-cell' + (this.delta > 0 ? ' bg-red-200' : ' bg-green-200')">
+    <td :class="'table-box__content-cell' + (this.delta > 0 ? ' bg-red-100' : ' bg-teal-100')">
       <span class="table-box__content-cell-content">{{ currentPortfolioShareFormatted }} ({{ deltaFormatted }})</span>
     </td>
-    <td :class="'table-box__content-cell' + (this.delta > 0 ? ' bg-red-200' : ' bg-green-200')">
+    <td :class="'table-box__content-cell' + (this.delta > 0 ? ' bg-red-100' : ' bg-teal-100')">
       <span class="table-box__content-cell-content">{{ actionFormatted }}</span>
     </td>
   </tr>
