@@ -9,19 +9,13 @@
       <span class="table-box__content-cell-content">{{ currentPriceFormatted }}</span>
     </td>
     <td class="table-box__content-cell">
-      <span class="table-box__content-cell-content">{{ amountFormatted }}</span>
-    </td>
-    <td class="table-box__content-cell">
-      <span class="table-box__content-cell-content">{{ amountUSDFormatted }}</span>
+      <span class="table-box__content-cell-content">{{ amountFormatted }} ({{ amountUSDFormatted }})</span>
     </td>
     <td class="table-box__content-cell">
       <span class="table-box__content-cell-content">{{ targetPortfolioShareFormatted }}</span>
     </td>
-    <td class="table-box__content-cell">
-      <span class="table-box__content-cell-content">{{ currentPortfolioShareFormatted }}</span>
-    </td>
     <td :class="'table-box__content-cell' + (this.delta > 0 ? ' bg-red-200' : ' bg-green-200')">
-      <span class="table-box__content-cell-content">{{ deltaFormatted }}</span>
+      <span class="table-box__content-cell-content">{{ currentPortfolioShareFormatted }} ({{ deltaFormatted }})</span>
     </td>
     <td :class="'table-box__content-cell' + (this.delta > 0 ? ' bg-red-200' : ' bg-green-200')">
       <span class="table-box__content-cell-content">{{ actionFormatted }}</span>

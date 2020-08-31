@@ -90,7 +90,7 @@
         <thead>
         <tr>
           <th
-              v-for="label in ['Coin', 'Price', 'Amount', 'Amount USD', 'Target Share', 'Current Share', 'Delta', 'Action']"
+              v-for="label in ['Coin', 'Price', 'Amount', 'Target', 'Current', 'Action']"
               :key="label"
               class="table-box__header-cell"
           >
@@ -118,17 +118,14 @@
             <td class="table-box__content-cell">
               <span class="table-box__content-cell-content">Total</span>
             </td>
-            <td class="table-box__content-cell" colspan="3">
+            <td class="table-box__content-cell" colspan="2">
               <span class="table-box__content-cell-content">{{ totalPortfolioValueUSDFormatted }}</span>
             </td>
             <td class="table-box__content-cell">
               <span class="table-box__content-cell-content">{{ totalTargetPortfolioShareFormatted }}</span>
             </td>
             <td class="table-box__content-cell">
-              <span class="table-box__content-cell-content">{{ totalCurrentPortfolioShareFormatted }}</span>
-            </td>
-            <td class="table-box__content-cell">
-              <span class="table-box__content-cell-content">{{ totalDeltaFormatted }}</span>
+              <span class="table-box__content-cell-content">{{ totalCurrentPortfolioShareFormatted }} ({{ totalDeltaFormatted }})</span>
             </td>
             <td class="table-box__content-cell">
               <span class="table-box__content-cell-content">{{ totalDeltaUSDFormatted }}</span>
