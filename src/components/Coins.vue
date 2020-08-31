@@ -90,7 +90,7 @@
         <thead>
         <tr>
           <th
-              v-for="label in ['Coin', 'Price', 'Amount', 'Amount USD', 'Target Share', 'Current Share', 'Delta']"
+              v-for="label in ['Coin', 'Price', 'Amount', 'Amount USD', 'Target Share', 'Current Share', 'Delta', 'Action']"
               :key="label"
               class="table-box__header-cell"
           >
@@ -112,6 +112,7 @@
               :current-portfolio-share-formatted="coin.currentPortfolioShareFormatted"
               :delta="coin.delta"
               :delta-formatted="coin.deltaFormatted"
+              :action-formatted="coin.actionFormatted"
           ></PortfolioRow>
           <tr class="border-collapse border-t-2 border-gray-500 font-bold">
             <td class="table-box__content-cell">
@@ -128,6 +129,9 @@
             </td>
             <td class="table-box__content-cell">
               <span class="table-box__content-cell-content">{{ totalDeltaFormatted }}</span>
+            </td>
+            <td class="table-box__content-cell">
+              <span class="table-box__content-cell-content">{{ totalDeltaUSDFormatted }}</span>
             </td>
           </tr>
         </tbody>
@@ -191,6 +195,9 @@ export default {
     totalDeltaFormatted() {
       return this.formatPercent(this.portfolioCoinsList.reduce((total, coin) => total + coin.delta, 0));
     },
+    totalDeltaUSDFormatted() {
+      return this.formatUSD(this.portfolioCoinsList.reduce((total, coin) => total + coin.deltaUSD, 0));
+    },
   },
   methods: {
     formatPercent(value) {
@@ -224,7 +231,8 @@ export default {
     this.marketCoinsList = this.coinsList.map((coin) => {
       coin.marketCap = coin.market_cap;
       coin.marketCapRank = coin.market_cap_rank;
-      coin.currentPriceFormatted = this.formatUSD(coin.current_price, 6);
+      coin.currentPrice = coin.current_price;
+      coin.currentPriceFormatted = this.formatUSD(coin.currentPrice, 6);
       coin.marketCapFormatted = this.formatUSD(coin.marketCap);
 
       if (this.config.blacklist.includes(coin.id)) {
@@ -253,7 +261,7 @@ export default {
         ;
 
         coin.amountFormatted = coin.amount.toFixed(6);
-        coin.amountUSD = coin.amount * coin.current_price;
+        coin.amountUSD = coin.amount * coin.currentPrice;
         coin.amountUSDFormatted = this.formatUSD(coin.amountUSD);
 
         return coin;
@@ -282,6 +290,9 @@ export default {
       coin.currentPortfolioShareFormatted = this.formatPercent(coin.currentPortfolioShare);
       coin.delta = coin.currentPortfolioShare - coin.targetPortfolioShare;
       coin.deltaFormatted = this.formatPercent(coin.delta);
+      coin.deltaUSD = coin.delta * this.totalPortfolioValueUSD;
+      coin.deltaNative = (coin.deltaUSD / coin.currentPrice).toFixed(6);
+      coin.actionFormatted = `${coin.delta > 0 ? '💸 Sell ' : '💰 Buy '} $${coin.symbol.toString().toUpperCase()} ${Math.abs(coin.deltaNative)} (${this.formatUSD(Math.abs(coin.deltaUSD))})`;
 
       return coin;
     });
