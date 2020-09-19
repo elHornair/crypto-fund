@@ -142,7 +142,7 @@
       <li
         v-for="coin in tradeCoinsList"
         :key="coin.id"
-        :class="'border-t-4 rounded-b text-teal-900 px-4 py-3 shadow-md mb-4' + (coin.delta > 0 ? ' bg-red-100 border-red-400' : ' bg-teal-100 border-teal-500')"
+        :class="'border-t-4 rounded-b text-teal-900 px-4 py-3 shadow-md mb-4' + (Math.abs(coin.deltaUSD) < 20 ? ' bg-orange-100 border-orange-300' : (coin.delta > 0 ? ' bg-red-100 border-red-400' : ' bg-teal-100 border-teal-500'))"
       >
           <p class="font-bold"><DisplayCoin :symbol="coin.symbol" :name="coin.name" :image-path="coin.image"></DisplayCoin></p>
           <p class="text-sm">{{ coin.actionFormatted }}</p>
